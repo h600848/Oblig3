@@ -12,6 +12,6 @@
 
     <!-- Delete Picture Activity -->
     <string name="delete">Delete</string>
-    <string name="animal_name">Animal Name</string>
+    <string name="animal_name">Image Name</string>
 
 </resources>
