@@ -15,9 +15,9 @@ import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
+    private final RecyclerViewInterface recyclerViewInterface;
     private Context context;
     private List<ImageEntity> images;
-    private RecyclerViewInterface recyclerViewInterface;
 
     public RecyclerViewAdapter(Context context, List<ImageEntity> images, RecyclerViewInterface recyclerViewInterface) {
         this.context = context;
@@ -35,9 +35,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ImageEntity image = images.get(position);
-        holder.textView.setText(image.name);
-        if (image.imagePath != null && !image.imagePath.isEmpty()) {
-            holder.imageView.setImageURI(Uri.parse(image.imagePath));
+        holder.textView.setText(image.getImageText());
+        if (image.getImagePath() != null && !image.getImagePath().isEmpty()) {
+            holder.imageView.setImageURI(Uri.parse(image.getImagePath()));
         }
     }
 
@@ -52,7 +52,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         public ViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
-            textView = itemView.findViewById(R.id.textView);
+            textView = itemView.findViewById(R.id.image_nameView);
             imageView = itemView.findViewById(R.id.imageView);
 
             itemView.setOnClickListener(v -> {
