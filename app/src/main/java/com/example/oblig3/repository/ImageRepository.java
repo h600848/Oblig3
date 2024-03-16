@@ -18,7 +18,7 @@ public class ImageRepository {
     // dependency. This adds complexity and much more code, and this sample is not about testing.
     // See the BasicSample in the android-architecture-components repository at
     // https://github.com/googlesamples
-    ImageRepository(Application application) {
+    public ImageRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
         imageDao = db.imageDao();
         allImages = imageDao.getAllImages();
@@ -26,21 +26,21 @@ public class ImageRepository {
 
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.
-    LiveData<List<ImageEntity>> getAllImages() {
+    public LiveData<List<ImageEntity>> getAllImages() {
         return allImages;
     }
 
     // You must call this on a non-UI thread or your app will throw an exception. Room ensures
     // that you're not doing any long running operations on the main thread, blocking the UI.
-    void insert(ImageEntity image) {
+    public void insert(ImageEntity image) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             imageDao.insert(image);
         });
     }
 
-    void deleteImageWithId(long id) {
+    public void deleteImageWithId(long id) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
-            imageDao.deleteDogWithId(id);
+            imageDao.deleteImageWithId(id);
         });
     }
 }

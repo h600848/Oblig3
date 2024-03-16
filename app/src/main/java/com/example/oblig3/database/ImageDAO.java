@@ -16,7 +16,7 @@ public interface ImageDAO {
     LiveData<List<ImageEntity>> getAllImages();
 
     @Query("DELETE FROM image_table WHERE  id = :id")
-    void deleteDogWithId(long id);
+    void deleteImageWithId(long id);
 
     @Query("SELECT * FROM image_table")
     LiveData<List<ImageEntity>> getAllDogs();

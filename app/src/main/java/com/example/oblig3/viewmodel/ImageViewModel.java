@@ -31,7 +31,7 @@ public class ImageViewModel extends AndroidViewModel {
         repository.insert(image);
     }
 
-    public void deleteDogWithId(long id) {
+    public void deleteImage(long id) {
         repository.deleteImageWithId(id);
     }
 }
