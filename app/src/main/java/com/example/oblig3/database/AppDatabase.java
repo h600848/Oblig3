@@ -1,9 +1,11 @@
 package com.example.oblig3.database;
 
 import android.content.Context;
+
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+
 import com.example.oblig3.model.ImageEntity;
 
 import java.util.concurrent.ExecutorService;
@@ -28,7 +30,7 @@ public abstract class AppDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
-                    // Opprett databasen her
+                    // Oppretter databasen her
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     AppDatabase.class, "image_database")
                             .fallbackToDestructiveMigration()

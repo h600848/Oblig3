@@ -4,11 +4,8 @@ import android.app.Application;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import com.example.oblig3.model.ImageEntity;
 import com.example.oblig3.repository.ImageRepository;

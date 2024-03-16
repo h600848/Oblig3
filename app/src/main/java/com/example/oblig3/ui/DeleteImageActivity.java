@@ -1,9 +1,11 @@
 package com.example.oblig3.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
 import com.example.oblig3.R;
 import com.example.oblig3.viewmodel.ImageViewModel;
 

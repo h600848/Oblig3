@@ -7,8 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.oblig3.R;
 import com.example.oblig3.model.ImageEntity;
 
@@ -47,6 +49,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return images.size();
     }
 
+    public void setImages(List<ImageEntity> images) {
+        this.images = images;
+        notifyDataSetChanged(); // Varsler om endring i datasettet
+    }
+
+    public ImageEntity getImageAtPosition(int position) {
+        return images.get(position);
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
         ImageView imageView;
@@ -62,14 +73,5 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 }
             });
         }
-    }
-
-    public void setImages(List<ImageEntity> images) {
-        this.images = images;
-        notifyDataSetChanged(); // Varsler om endring i datasettet
-    }
-
-    public ImageEntity getImageAtPosition(int position) {
-        return images.get(position);
     }
 }

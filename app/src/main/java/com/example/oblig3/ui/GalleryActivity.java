@@ -6,20 +6,20 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.oblig3.R;
 import com.example.oblig3.adapter.RecyclerViewAdapter;
 import com.example.oblig3.adapter.RecyclerViewInterface;
 import com.example.oblig3.model.ImageEntity;
 import com.example.oblig3.viewmodel.ImageViewModel;
 
-
 public class GalleryActivity extends AppCompatActivity implements RecyclerViewInterface {
-
     private static final int GALLERY_REQUEST = 1; // Class constant for gallery request
     private ImageViewModel imageViewModel;
     private RecyclerViewAdapter recyclerViewAdapter;
