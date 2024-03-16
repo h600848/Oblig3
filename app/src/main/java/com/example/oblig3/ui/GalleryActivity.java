@@ -32,14 +32,15 @@ public class GalleryActivity extends AppCompatActivity implements RecyclerViewIn
         RecyclerView recyclerView = findViewById(R.id.myRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        imageViewModel = new ViewModelProvider(this).get(ImageViewModel.class);
-
-        // Anta at RecyclerViewAdapter er riktig initialisert og satt opp for å bruke ImageEntity objekter.
-        recyclerViewAdapter = new RecyclerViewAdapter(this, imageViewModel.getAllImages().getValue(), this);
+        recyclerViewAdapter = new RecyclerViewAdapter(this, this); // Oppdatert for å reflektere den nye konstruktøren
         recyclerView.setAdapter(recyclerViewAdapter);
 
-        // Observer LiveData fra ViewModel
-        imageViewModel.getAllImages().observe(this, images -> recyclerViewAdapter.setImages(images));
+        imageViewModel = new ViewModelProvider(this).get(ImageViewModel.class);
+
+        imageViewModel.getAllImages().observe(this, images -> {
+            // Oppdater adapteren med de nye dataene
+            recyclerViewAdapter.setImages(images);
+        });
     }
 
     public void addButton(View view){

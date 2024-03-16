@@ -4,6 +4,7 @@ import android.app.Application;
 
 import androidx.lifecycle.LiveData;
 
+import com.example.oblig3.R;
 import com.example.oblig3.database.AppDatabase;
 import com.example.oblig3.database.ImageDAO;
 import com.example.oblig3.model.ImageEntity;
@@ -41,6 +42,15 @@ public class ImageRepository {
     public void deleteImageWithId(long id) {
         AppDatabase.databaseWriteExecutor.execute(() -> {
             imageDao.deleteImageWithId(id);
+        });
+    }
+
+    public void initializeStartImages() {
+        AppDatabase.databaseWriteExecutor.execute(() -> {
+            if (imageDao.getCountOfImages() == 0) {
+                imageDao.insert(new ImageEntity("Gorilla", R.drawable.gorilla, null));
+                imageDao.insert(new ImageEntity("Polar Bear", R.drawable.isbjorn, null));
+            }
         });
     }
 }

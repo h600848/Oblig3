@@ -11,17 +11,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.oblig3.R;
 import com.example.oblig3.model.ImageEntity;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-
-    private final RecyclerViewInterface recyclerViewInterface;
     private Context context;
-    private List<ImageEntity> images;
+    private List<ImageEntity> images; // Endret til å initialiseres som en tom liste
+    private RecyclerViewInterface recyclerViewInterface;
 
-    public RecyclerViewAdapter(Context context, List<ImageEntity> images, RecyclerViewInterface recyclerViewInterface) {
+    public RecyclerViewAdapter(Context context, RecyclerViewInterface recyclerViewInterface) {
         this.context = context;
-        this.images = images;
+        this.images = new ArrayList<>(); // Initialiserer som tom liste for å unngå NullPointerException
         this.recyclerViewInterface = recyclerViewInterface;
     }
 

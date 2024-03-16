@@ -23,4 +23,7 @@ public interface ImageDAO {
 
     @Query("DELETE FROM image_table")
     void deleteAll();
+
+    @Query("SELECT COUNT(id) FROM image_table")
+    int getCountOfImages();
 }
