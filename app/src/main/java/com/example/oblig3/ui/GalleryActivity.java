@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.oblig3.R;
 import com.example.oblig3.adapter.RecyclerViewAdapter;
+import com.example.oblig3.adapter.RecyclerViewInterface;
 import com.example.oblig3.model.ImageEntity;
 import com.example.oblig3.viewmodel.ImageViewModel;
 

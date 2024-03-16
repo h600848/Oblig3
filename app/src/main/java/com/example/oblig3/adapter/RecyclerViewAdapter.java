@@ -35,7 +35,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ImageEntity image = images.get(position);
-        holder.textView.setText(image.getImageText());
+        holder.textView.setText(image.getImageName());
         if (image.getImagePath() != null && !image.getImagePath().isEmpty()) {
             holder.imageView.setImageURI(Uri.parse(image.getImagePath()));
         }
@@ -61,5 +61,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 }
             });
         }
+    }
+
+    public void setImages(List<ImageEntity> images) {
+        this.images = images;
+        notifyDataSetChanged(); // Varsler om endring i datasettet
+    }
+
+    public ImageEntity getImageAtPosition(int position) {
+        return images.get(position);
     }
 }
