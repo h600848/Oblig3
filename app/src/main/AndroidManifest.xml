@@ -16,7 +16,7 @@
             android:name=".ui.QuizActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.DeletePictureActivity"
+            android:name=".ui.DeleteImageActivity"
             android:exported="false" />
         <activity
             android:name=".ui.GalleryActivity"
