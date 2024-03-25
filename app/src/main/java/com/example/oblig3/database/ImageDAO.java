@@ -12,20 +12,14 @@ import com.example.oblig3.model.ImageEntity;
 @Dao
 public interface ImageDAO {
     @Insert
-    void insert(ImageEntity image);
+    void insertImage(ImageEntity image);
+
+    @Query("SELECT * FROM image_table WHERE imageName = :name")
+    List<ImageEntity> findImage(String name);
+
+    @Query("DELETE FROM image_table WHERE imageName = :name")
+    void deleteImage(String name);
 
     @Query("SELECT * FROM image_table")
     LiveData<List<ImageEntity>> getAllImages();
-
-    @Query("DELETE FROM image_table WHERE  id = :id")
-    void deleteImageWithId(long id);
-
-    @Query("SELECT * FROM image_table")
-    LiveData<List<ImageEntity>> getAllDogs();
-
-    @Query("DELETE FROM image_table")
-    void deleteAll();
-
-    @Query("SELECT COUNT(id) FROM image_table")
-    int getCountOfImages();
 }

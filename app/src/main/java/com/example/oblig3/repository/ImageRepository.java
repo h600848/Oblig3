@@ -1,10 +1,11 @@
 package com.example.oblig3.repository;
 
 import android.app.Application;
+import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
-import com.example.oblig3.R;
 import com.example.oblig3.database.AppDatabase;
 import com.example.oblig3.database.ImageDAO;
 import com.example.oblig3.model.ImageEntity;
@@ -12,44 +13,84 @@ import com.example.oblig3.model.ImageEntity;
 import java.util.List;
 
 public class ImageRepository {
+    private MutableLiveData<List<ImageEntity>> searchResults = new MutableLiveData<>();
     private ImageDAO imageDao;
     private LiveData<List<ImageEntity>> allImages;
 
-    // Note that in order to unit test the WordRepository, you have to remove the Application
-    // dependency. This adds complexity and much more code, and this sample is not about testing.
-    // See the BasicSample in the android-architecture-components repository at https://github.com/googlesamples
+    public LiveData<List<ImageEntity>> getAllImages() {
+        return allImages;
+    }
+
     public ImageRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
         imageDao = db.imageDao();
         allImages = imageDao.getAllImages();
     }
 
-    // Room executes all queries on a separate thread.
-    // Observed LiveData will notify the observer when the data has changed.
-    public LiveData<List<ImageEntity>> getAllImages() {
-        return allImages;
+    public void insertImage(ImageEntity newimage) {
+        InsertAsyncTask task = new InsertAsyncTask(imageDao);
+        task.execute(newimage);
     }
 
-    // You must call this on a non-UI thread or your app will throw an exception. Room ensures
-    // that you're not doing any long running operations on the main thread, blocking the UI.
-    public void insert(ImageEntity image) {
-        AppDatabase.databaseWriteExecutor.execute(() -> {
-            imageDao.insert(image);
-        });
+    public void deleteImage(String name) {
+        DeleteAsyncTask task = new DeleteAsyncTask(imageDao);
+        task.execute(name);
     }
 
-    public void deleteImageWithId(long id) {
-        AppDatabase.databaseWriteExecutor.execute(() -> {
-            imageDao.deleteImageWithId(id);
-        });
+    public void findImage(String name) {
+        QueryAsyncTask task = new QueryAsyncTask(imageDao);
+        task.delegate = this;
+        task.execute(name);
     }
 
-    public void initializeStartImages() {
-        AppDatabase.databaseWriteExecutor.execute(() -> {
-            if (imageDao.getCountOfImages() == 0) {
-                imageDao.insert(new ImageEntity("Gorilla", R.drawable.gorilla, null));
-                imageDao.insert(new ImageEntity("Polar Bear", R.drawable.isbjorn, null));
-            }
-        });
+    private void asyncFinished(List<ImageEntity> results) {
+        searchResults.setValue(results);
+    }
+
+    private static class QueryAsyncTask extends AsyncTask<String, Void, List<ImageEntity>> {
+        private ImageDAO asyncTaskDao;
+        private ImageRepository delegate = null;
+
+        QueryAsyncTask(ImageDAO dao) {
+            asyncTaskDao = dao;
+        }
+
+        @Override
+        protected List<ImageEntity> doInBackground(final String... params) {
+            return asyncTaskDao.findImage(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(List<ImageEntity> result) {
+            delegate.asyncFinished(result);
+        }
+    }
+
+    private static class InsertAsyncTask extends AsyncTask<ImageEntity, Void, Void> {
+        private ImageDAO asyncTaskDao;
+
+        InsertAsyncTask(ImageDAO dao) {
+            asyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final ImageEntity... params) {
+            asyncTaskDao.insertImage(params[0]);
+            return null;
+        }
+    }
+
+    private static class DeleteAsyncTask extends AsyncTask<String, Void, Void> {
+        private ImageDAO asyncTaskDao;
+
+        DeleteAsyncTask(ImageDAO dao) {
+            asyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final String... params) {
+            asyncTaskDao.deleteImage(params[0]);
+            return null;
+        }
     }
 }

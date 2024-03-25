@@ -5,10 +5,10 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import java.util.List;
-
 import com.example.oblig3.model.ImageEntity;
 import com.example.oblig3.repository.ImageRepository;
+
+import java.util.List;
 
 public class ImageViewModel extends AndroidViewModel {
     private ImageRepository repository;
@@ -18,18 +18,21 @@ public class ImageViewModel extends AndroidViewModel {
         super(application);
         repository = new ImageRepository(application);
         allImages = repository.getAllImages();
-        repository.initializeStartImages();
     }
 
-    public LiveData<List<ImageEntity>> getAllImages() {
+    LiveData<List<ImageEntity>> getAllImages() {
         return allImages;
     }
 
-    public void insert(ImageEntity image) {
-        repository.insert(image);
+    public void insertImage(ImageEntity image) {
+        repository.insertImage(image);
     }
 
-    public void deleteImage(long id) {
-        repository.deleteImageWithId(id);
+    public void findImage(String name) {
+        repository.findImage(name);
+    }
+
+    public void deleteImage(String name) {
+        repository.deleteImage(name);
     }
 }
