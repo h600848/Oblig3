@@ -13,14 +13,9 @@ import com.example.oblig3.model.ImageEntity;
 import java.util.List;
 
 public class ImageRepository {
-    private MutableLiveData<List<ImageEntity>> searchResults = new MutableLiveData<>();
     private ImageDAO imageDao;
     private LiveData<List<ImageEntity>> allImages;
     private MutableLiveData<ImageEntity> liveDataImage = new MutableLiveData<>();
-
-    public LiveData<List<ImageEntity>> getAllImages() {
-        return allImages;
-    }
 
     public ImageRepository(Application application) {
         AppDatabase db = AppDatabase.getDatabase(application);
@@ -28,30 +23,27 @@ public class ImageRepository {
         allImages = imageDao.getAllImages();
     }
 
+    public LiveData<List<ImageEntity>> getAllImages() {
+        return allImages;
+    }
+
     public void insertImage(ImageEntity newimage) {
-        InsertAsyncTask task = new InsertAsyncTask(imageDao);
-        task.execute(newimage);
+        new InsertAsyncTask(imageDao).execute(newimage);
     }
 
     public void deleteImage(String name) {
-        DeleteAsyncTask task = new DeleteAsyncTask(imageDao);
-        task.execute(name);
+        new DeleteAsyncTask(imageDao).execute(name);
     }
 
-    public LiveData<ImageEntity> findImageByPosition(int position) {
-        QueryAsyncTask task = new QueryAsyncTask(imageDao, liveDataImage);
-        task.execute(position);
+    // Antar at vi henter basert på en unik ID istedenfor en posisjon
+    public LiveData<ImageEntity> findImageById(int id) {
+        new QueryAsyncTask(imageDao, liveDataImage).execute(id);
         return liveDataImage;
-    }
-
-    private void asyncFinished(List<ImageEntity> results) {
-        searchResults.setValue(results);
     }
 
     private static class QueryAsyncTask extends AsyncTask<Integer, Void, ImageEntity> {
         private ImageDAO asyncTaskDao;
         private MutableLiveData<ImageEntity> liveDataImage;
-
 
         QueryAsyncTask(ImageDAO dao, MutableLiveData<ImageEntity> liveDataImage) {
             asyncTaskDao = dao;
@@ -59,9 +51,12 @@ public class ImageRepository {
         }
 
         @Override
-        protected ImageEntity doInBackground(Integer... positions) {
-            int position = positions[0];
-            return asyncTaskDao.findImageByPosition(position);
+        protected ImageEntity doInBackground(Integer... ids) {
+            List<ImageEntity> result = asyncTaskDao.findImageById(ids[0]);
+            if (!result.isEmpty()) {
+                return result.get(0); // Henter det første bildet i listen, antar at ID er unik
+            }
+            return null;
         }
 
         @Override

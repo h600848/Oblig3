@@ -2,7 +2,6 @@ package com.example.oblig3.model;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -10,7 +9,7 @@ import androidx.room.PrimaryKey;
 public class ImageEntity {
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    private int imageId;
+    private int imageId; // ID-en genereres automatisk
 
     @NonNull
     private String imageName;
@@ -19,18 +18,18 @@ public class ImageEntity {
     private String imagePath;
 
     public ImageEntity(@NonNull String imageName, @Nullable String imagePath) {
-        this.imageId = imageId;
+        // Fjernet den feilaktige tildelingen av imageId i konstruktøren
         this.imageName = imageName;
         this.imagePath = imagePath;
     }
 
     // Getters and setters
-    public int getId() {
+    public int getImageId() {
         return imageId;
     }
 
-    public void setId(int id) {
-        this.imageId = id;
+    public void setImageId(int imageId) {
+        this.imageId = imageId;
     }
 
     @NonNull

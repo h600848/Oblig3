@@ -28,10 +28,10 @@ public class ImageViewModel extends AndroidViewModel {
         repository.insertImage(image);
     }
 
-    public LiveData<ImageEntity> getImageByPosition(int position) {
-        return repository.findImageByPositoin(position);
+    // Oppdatert for å gjenspeile endringen i navn fra findImageByPosition til findImageById
+    public LiveData<ImageEntity> getImageById(int id) {
+        return repository.findImageById(id);
     }
-
 
     public void deleteImage(String name) {
         repository.deleteImage(name);

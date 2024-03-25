@@ -10,6 +10,7 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +20,8 @@ import com.example.oblig3.adapter.RecyclerViewInterface;
 import com.example.oblig3.database.AppDatabase;
 import com.example.oblig3.model.ImageEntity;
 import com.example.oblig3.viewmodel.ImageViewModel;
+
+import java.util.ArrayList;
 
 public class GalleryActivity extends AppCompatActivity implements RecyclerViewInterface {
     private static final int GALLERY_REQUEST = 1; // Class constant for gallery request
@@ -30,13 +33,17 @@ public class GalleryActivity extends AppCompatActivity implements RecyclerViewIn
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
 
-        RecyclerView recyclerView = findViewById(R.id.myRecyclerView);
+        imageViewModel = new ViewModelProvider(this).get(ImageViewModel.class);
+        recyclerViewAdapter = new RecyclerViewAdapter(this, new ArrayList<>(), this);
 
-        // TODO
-        // Må finne ut av hva jeg skal ha der det står AppDatabase
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, AppDatabase, this); // Oppdatert for å reflektere den nye konstruktøren
-        recyclerView.setAdapter(adapter);
+        RecyclerView recyclerView = findViewById(R.id.myRecyclerView);
+        recyclerView.setAdapter(recyclerViewAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        imageViewModel.getAllImages().observe(this, images -> {
+            // Oppdaterer RecyclerViewAdapter med den nye listen av bilder
+            recyclerViewAdapter.setImages(images);
+        });
     }
 
     /**
@@ -115,15 +122,17 @@ public class GalleryActivity extends AppCompatActivity implements RecyclerViewIn
 
     @Override
     public void onItemClick(int position) {
-        //Code for on click in recycleView
-        Intent intent = new Intent(this, DeleteImageActivity.class);
-
-        //Gives information about the Image by the RecyclerviewAdapter based on the position.
-        intent.putExtra("NAME", AppDatabase.getDatabase(getApplicationContext()).getImage(position).getName());
-
-        Uri imageUri = AppDatabase.getDatabase(getApplicationContext()).getImage(position).getImage();
-        intent.putExtra("IMAGE", imageUri.toString());
-
-        startActivity(intent);
+        // Hent informasjon om bildet basert på posisjon - dette krever endringer i ViewModel
+        // For demonstrasjonsformål antar vi at ImageViewModel har en metode for å hente ImageEntity basert på ID/posisjon
+        imageViewModel.getImageById(position).observe(this, imageEntity -> {
+            if (imageEntity != null) {
+                // Starter DeleteImageActivity med bildeinformasjon
+                Intent intent = new Intent(this, DeleteImageActivity.class);
+                intent.putExtra("NAME", imageEntity.getImageName());
+                Uri imageUri = Uri.parse(imageEntity.getImagePath());
+                intent.putExtra("IMAGE", imageUri.toString());
+                startActivity(intent);
+            }
+        });
     }
 }
