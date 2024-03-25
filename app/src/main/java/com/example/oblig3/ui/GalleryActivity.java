@@ -5,17 +5,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.oblig3.R;
 import com.example.oblig3.adapter.RecyclerViewAdapter;
 import com.example.oblig3.adapter.RecyclerViewInterface;
+import com.example.oblig3.database.AppDatabase;
 import com.example.oblig3.model.ImageEntity;
 import com.example.oblig3.viewmodel.ImageViewModel;
 
@@ -30,17 +31,28 @@ public class GalleryActivity extends AppCompatActivity implements RecyclerViewIn
         setContentView(R.layout.activity_gallery);
 
         RecyclerView recyclerView = findViewById(R.id.myRecyclerView);
+
+        // TODO
+        // Må finne ut av hva jeg skal ha der det står AppDatabase
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, AppDatabase, this); // Oppdatert for å reflektere den nye konstruktøren
+        recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
 
-        recyclerViewAdapter = new RecyclerViewAdapter(this, ImageEntity.getList(), this); // Oppdatert for å reflektere den nye konstruktøren
-        recyclerView.setAdapter(recyclerViewAdapter);
+    /**
+     * @param view The view that triggered this method, typically a sort button in the user interface.
+     */
+    public void sortButton(View view){
+        // Refresh the RecyclerView
+        refreshRecyclerView();
 
-        imageViewModel = new ViewModelProvider(this).get(ImageViewModel.class);
-
-        imageViewModel.getAllImages().observe(this, images -> {
-            // Oppdater adapteren med de nye dataene
-            recyclerViewAdapter.setImages(images);
-        });
+        Button sortButton = (Button) findViewById(R.id.sort_btn);
+        // Må fikse her TODO
+        if (true) {
+            sortButton.setText("Sort A-Z");
+        } else {
+            sortButton.setText("Sort Z-A");
+        }
     }
 
     public void addButton(View view){
@@ -85,22 +97,33 @@ public class GalleryActivity extends AppCompatActivity implements RecyclerViewIn
                 .setPositiveButton("OK", (dialog, which) -> {
                     String name = input.getText().toString().trim();
                     if (!name.isEmpty()) {
-                        ImageEntity newImage = new ImageEntity(name, 0, imageUri.toString());
-                        imageViewModel.insert(newImage);
+                        ImageEntity newImage = new ImageEntity(name, imageUri.toString());
+                        imageViewModel.insertImage(newImage);
                     }
                 })
                 .setNegativeButton("Cancel", null)
                 .show();
     }
 
+    private void refreshRecyclerView() {
+        RecyclerView recyclerView = findViewById(R.id.myRecyclerView);
+        RecyclerViewAdapter adapter = (RecyclerViewAdapter) recyclerView.getAdapter();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged(); // Notify the adapter to refresh the view
+        }
+    }
+
     @Override
     public void onItemClick(int position) {
-        // Hent valgt ImageEntity basert på posisjon
-        ImageEntity selectedImage = recyclerViewAdapter.getImageAtPosition(position);
-
-        // Start Gallery_Item_Click aktivitet med ImageEntity-objektet
+        //Code for on click in recycleView
         Intent intent = new Intent(this, DeleteImageActivity.class);
-        intent.putExtra("IMAGE_ENTITY", selectedImage);
+
+        //Gives information about the Image by the RecyclerviewAdapter based on the position.
+        intent.putExtra("NAME", AppDatabase.getDatabase(getApplicationContext()).getImage(position).getName());
+
+        Uri imageUri = AppDatabase.getDatabase(getApplicationContext()).getImage(position).getImage();
+        intent.putExtra("IMAGE", imageUri.toString());
+
         startActivity(intent);
     }
 }

@@ -20,7 +20,7 @@ public class ImageViewModel extends AndroidViewModel {
         allImages = repository.getAllImages();
     }
 
-    LiveData<List<ImageEntity>> getAllImages() {
+    public LiveData<List<ImageEntity>> getAllImages() {
         return allImages;
     }
 
