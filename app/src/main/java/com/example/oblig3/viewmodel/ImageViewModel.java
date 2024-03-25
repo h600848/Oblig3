@@ -28,9 +28,10 @@ public class ImageViewModel extends AndroidViewModel {
         repository.insertImage(image);
     }
 
-    public void findImage(String name) {
-        repository.findImage(name);
+    public LiveData<ImageEntity> getImageByPosition(int position) {
+        return repository.findImageByPositoin(position);
     }
+
 
     public void deleteImage(String name) {
         repository.deleteImage(name);

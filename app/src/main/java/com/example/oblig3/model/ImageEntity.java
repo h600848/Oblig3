@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey;
 public class ImageEntity {
     @PrimaryKey(autoGenerate = true)
     @NonNull
-    private int id;
+    private int imageId;
 
     @NonNull
     private String imageName;
@@ -19,18 +19,18 @@ public class ImageEntity {
     private String imagePath;
 
     public ImageEntity(@NonNull String imageName, @Nullable String imagePath) {
-        this.id = id;
+        this.imageId = imageId;
         this.imageName = imageName;
         this.imagePath = imagePath;
     }
 
     // Getters and setters
     public int getId() {
-        return id;
+        return imageId;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.imageId = id;
     }
 
     @NonNull

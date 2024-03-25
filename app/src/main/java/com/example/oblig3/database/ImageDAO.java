@@ -14,8 +14,8 @@ public interface ImageDAO {
     @Insert
     void insertImage(ImageEntity image);
 
-    @Query("SELECT * FROM image_table WHERE imageName = :name")
-    List<ImageEntity> findImage(String name);
+    @Query("SELECT * FROM image_table WHERE imageId = :id")
+    List<ImageEntity> findImageByPosition(int id);
 
     @Query("DELETE FROM image_table WHERE imageName = :name")
     void deleteImage(String name);

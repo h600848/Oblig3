@@ -16,6 +16,7 @@ public class ImageRepository {
     private MutableLiveData<List<ImageEntity>> searchResults = new MutableLiveData<>();
     private ImageDAO imageDao;
     private LiveData<List<ImageEntity>> allImages;
+    private MutableLiveData<ImageEntity> liveDataImage = new MutableLiveData<>();
 
     public LiveData<List<ImageEntity>> getAllImages() {
         return allImages;
@@ -37,32 +38,35 @@ public class ImageRepository {
         task.execute(name);
     }
 
-    public void findImage(String name) {
-        QueryAsyncTask task = new QueryAsyncTask(imageDao);
-        task.delegate = this;
-        task.execute(name);
+    public LiveData<ImageEntity> findImageByPosition(int position) {
+        QueryAsyncTask task = new QueryAsyncTask(imageDao, liveDataImage);
+        task.execute(position);
+        return liveDataImage;
     }
 
     private void asyncFinished(List<ImageEntity> results) {
         searchResults.setValue(results);
     }
 
-    private static class QueryAsyncTask extends AsyncTask<String, Void, List<ImageEntity>> {
+    private static class QueryAsyncTask extends AsyncTask<Integer, Void, ImageEntity> {
         private ImageDAO asyncTaskDao;
-        private ImageRepository delegate = null;
+        private MutableLiveData<ImageEntity> liveDataImage;
 
-        QueryAsyncTask(ImageDAO dao) {
+
+        QueryAsyncTask(ImageDAO dao, MutableLiveData<ImageEntity> liveDataImage) {
             asyncTaskDao = dao;
+            this.liveDataImage = liveDataImage;
         }
 
         @Override
-        protected List<ImageEntity> doInBackground(final String... params) {
-            return asyncTaskDao.findImage(params[0]);
+        protected ImageEntity doInBackground(Integer... positions) {
+            int position = positions[0];
+            return asyncTaskDao.findImageByPosition(position);
         }
 
         @Override
-        protected void onPostExecute(List<ImageEntity> result) {
-            delegate.asyncFinished(result);
+        protected void onPostExecute(ImageEntity imageEntity) {
+            liveDataImage.setValue(imageEntity);
         }
     }
 
