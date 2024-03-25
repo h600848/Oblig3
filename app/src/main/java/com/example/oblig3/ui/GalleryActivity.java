@@ -32,7 +32,7 @@ public class GalleryActivity extends AppCompatActivity implements RecyclerViewIn
         RecyclerView recyclerView = findViewById(R.id.myRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        recyclerViewAdapter = new RecyclerViewAdapter(this, this); // Oppdatert for å reflektere den nye konstruktøren
+        recyclerViewAdapter = new RecyclerViewAdapter(this, ImageEntity.getList(), this); // Oppdatert for å reflektere den nye konstruktøren
         recyclerView.setAdapter(recyclerViewAdapter);
 
         imageViewModel = new ViewModelProvider(this).get(ImageViewModel.class);

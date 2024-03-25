@@ -14,34 +14,31 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.oblig3.R;
 import com.example.oblig3.model.ImageEntity;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-    private Context context;
-    private List<ImageEntity> images; // Endret til å initialiseres som en tom liste
-    private RecyclerViewInterface recyclerViewInterface;
+public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
+    Context context;
+    List<ImageEntity> images; // Endret til å initialiseres som en tom liste
+    private final RecyclerViewInterface recyclerViewInterface;
 
-    public RecyclerViewAdapter(Context context, RecyclerViewInterface recyclerViewInterface) {
+    public RecyclerViewAdapter(Context context, List<ImageEntity> images, RecyclerViewInterface recyclerViewInterface) {
         this.context = context;
-        this.images = new ArrayList<>(); // Initialiserer som tom liste for å unngå NullPointerException
+        this.images = images; // Initialiserer som tom liste for å unngå NullPointerException
         this.recyclerViewInterface = recyclerViewInterface;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public RecyclerViewAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.recyclerview_row, parent, false);
-        return new ViewHolder(view, recyclerViewInterface);
+        return new RecyclerViewAdapter.MyViewHolder(view, recyclerViewInterface);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerViewAdapter.MyViewHolder holder, int position) {
         ImageEntity image = images.get(position);
         holder.textView.setText(image.getImageName());
-        if (image.getImagePath() != null && !image.getImagePath().isEmpty()) {
-            holder.imageView.setImageURI(Uri.parse(image.getImagePath()));
-        }
+        holder.imageView.setImageURI(Uri.parse(image.getImagePath()));
     }
 
     @Override
@@ -58,18 +55,25 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return images.get(position);
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView textView;
         ImageView imageView;
 
-        public ViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
+        public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
             textView = itemView.findViewById(R.id.image_nameView);
             imageView = itemView.findViewById(R.id.imageView);
 
-            itemView.setOnClickListener(v -> {
-                if (recyclerViewInterface != null && getAdapterPosition() != RecyclerView.NO_POSITION) {
-                    recyclerViewInterface.onItemClick(getAdapterPosition());
+            itemView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    if (recyclerViewInterface != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            recyclerViewInterface.onItemClick(position);
+                        }
+                    }
                 }
             });
         }
