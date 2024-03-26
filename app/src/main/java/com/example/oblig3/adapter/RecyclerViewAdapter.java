@@ -18,12 +18,12 @@ import java.util.List;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.MyViewHolder> {
     Context context;
-    List<ImageEntity> images; // Endret til å initialiseres som en tom liste
+    List<ImageEntity> images;
     private final RecyclerViewInterface recyclerViewInterface;
 
     public RecyclerViewAdapter(Context context, List<ImageEntity> images, RecyclerViewInterface recyclerViewInterface) {
         this.context = context;
-        this.images = images; // Initialiserer som tom liste for å unngå NullPointerException
+        this.images = images;
         this.recyclerViewInterface = recyclerViewInterface;
     }
 
@@ -37,23 +37,27 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(@NonNull RecyclerViewAdapter.MyViewHolder holder, int position) {
         ImageEntity image = images.get(position);
+
         holder.textView.setText(image.getImageName());
-        holder.imageView.setImageURI(Uri.parse(image.getImagePath()));
+
+        if (image.getImagePath() != null && !image.getImagePath().isEmpty()) {
+            holder.imageView.setImageURI(Uri.parse(image.getImagePath()));
+        } else {
+            // Sett et standardbilde eller skjul ImageView hvis ingen URI er tilgjengelig
+            holder.imageView.setVisibility(View.GONE); // Eller sett til en standard drawable
+        }
+
     }
 
     @Override
     public int getItemCount() {
-        return images.size();
-        // return (images != null) ? images.size() : 0;
+        // return images.size();
+        return (images != null) ? images.size() : 0;
     }
 
     public void setImages(List<ImageEntity> images) {
         this.images = images;
         notifyDataSetChanged(); // Varsler om endring i datasettet
-    }
-
-    public ImageEntity getImageAtPosition(int position) {
-        return images.get(position);
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -66,7 +70,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             imageView = itemView.findViewById(R.id.imageView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
                     if (recyclerViewInterface != null) {
