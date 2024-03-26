@@ -44,6 +44,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public int getItemCount() {
         return images.size();
+        // return (images != null) ? images.size() : 0;
     }
 
     public void setImages(List<ImageEntity> images) {

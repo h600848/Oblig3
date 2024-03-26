@@ -18,6 +18,7 @@ public class ImageViewModel extends AndroidViewModel {
         super(application);
         repository = new ImageRepository(application);
         allImages = repository.getAllImages();
+        repository.initializeDefaultImages(application);
     }
 
     public LiveData<List<ImageEntity>> getAllImages() {

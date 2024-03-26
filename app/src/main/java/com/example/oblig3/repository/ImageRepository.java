@@ -6,10 +6,12 @@ import android.os.AsyncTask;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.example.oblig3.R;
 import com.example.oblig3.database.AppDatabase;
 import com.example.oblig3.database.ImageDAO;
 import com.example.oblig3.model.ImageEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ImageRepository {
@@ -90,6 +92,22 @@ public class ImageRepository {
         protected Void doInBackground(final String... params) {
             asyncTaskDao.deleteImage(params[0]);
             return null;
+        }
+    }
+
+    public void initializeDefaultImages(Application application) {
+        // Sjekk om databasen er tom
+        if (allImages.getValue() == null || allImages.getValue().isEmpty()) {
+            // Definer stiene til standardbilder
+            List<ImageEntity> defaultImages = new ArrayList<>();
+            defaultImages.add(new ImageEntity("Fox", "android.resource://" + application.getPackageName() + "/" + R.drawable.fox));
+            defaultImages.add(new ImageEntity("Polar bear", "android.resource://" + application.getPackageName() + "/" + R.drawable.isbjorn));
+            defaultImages.add(new ImageEntity("Gorilla", "android.resource://" + application.getPackageName() + "/" + R.drawable.gorilla));
+
+            // Legger til hvert standardbilde i databasen
+            for (ImageEntity image : defaultImages) {
+                insertImage(image);
+            }
         }
     }
 }

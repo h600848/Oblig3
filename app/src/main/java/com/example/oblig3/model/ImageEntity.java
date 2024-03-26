@@ -18,7 +18,6 @@ public class ImageEntity {
     private String imagePath;
 
     public ImageEntity(@NonNull String imageName, @Nullable String imagePath) {
-        // Fjernet den feilaktige tildelingen av imageId i konstruktøren
         this.imageName = imageName;
         this.imagePath = imagePath;
     }
