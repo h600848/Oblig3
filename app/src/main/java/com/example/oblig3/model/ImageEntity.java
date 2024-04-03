@@ -1,7 +1,9 @@
 package com.example.oblig3.model;
 
+import android.net.Uri;
+
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -11,13 +13,11 @@ public class ImageEntity {
     @NonNull
     private int imageId; // ID-en genereres automatisk
 
-    @NonNull
     private String imageName;
 
-    @Nullable
-    private String imagePath;
+    private Uri imagePath;
 
-    public ImageEntity(@NonNull String imageName, @Nullable String imagePath) {
+    public ImageEntity(String imageName, Uri imagePath) {
         this.imageName = imageName;
         this.imagePath = imagePath;
     }
@@ -31,13 +31,11 @@ public class ImageEntity {
         this.imageId = imageId;
     }
 
-    @NonNull
-    public String getImageName() {
+     public String getImageName() {
         return imageName;
     }
 
-    @Nullable
-    public String getImagePath() {
+    public Uri getImagePath() {
         return imagePath;
     }
 }

@@ -39,20 +39,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         ImageEntity image = images.get(position);
 
         holder.textView.setText(image.getImageName());
-
-        if (image.getImagePath() != null && !image.getImagePath().isEmpty()) {
-            holder.imageView.setImageURI(Uri.parse(image.getImagePath()));
-        } else {
-            // Sett et standardbilde eller skjul ImageView hvis ingen URI er tilgjengelig
-            holder.imageView.setVisibility(View.GONE); // Eller sett til en standard drawable
-        }
-
+        holder.imageView.setImageURI(image.getImagePath());
     }
 
     @Override
     public int getItemCount() {
-        // return images.size();
-        return (images != null) ? images.size() : 0;
+        return images.size();
     }
 
     public void setImages(List<ImageEntity> images) {

@@ -18,23 +18,17 @@ public class ImageViewModel extends AndroidViewModel {
         super(application);
         repository = new ImageRepository(application);
         allImages = repository.getAllImages();
-        repository.initializeDefaultImages(application);
     }
 
     public LiveData<List<ImageEntity>> getAllImages() {
         return allImages;
     }
 
-    public void insertImage(ImageEntity image) {
-        repository.insertImage(image);
+    public void insertImage(ImageEntity imageEntity) {
+        repository.insertImage(imageEntity);
     }
 
-    // Oppdatert for å gjenspeile endringen i navn fra findImageByPosition til findImageById
-    public LiveData<ImageEntity> getImageById(int id) {
-        return repository.findImageById(id);
-    }
-
-    public void deleteImage(String name) {
-        repository.deleteImage(name);
+    public void deleteImage(ImageEntity imageEntity) {
+        repository.deleteImage(imageEntity);
     }
 }

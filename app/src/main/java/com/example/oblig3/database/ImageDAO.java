@@ -2,6 +2,7 @@ package com.example.oblig3.database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -17,8 +18,12 @@ public interface ImageDAO {
     @Query("SELECT * FROM image_table WHERE imageId = :id")
     List<ImageEntity> findImageById(int id);
 
-    @Query("DELETE FROM image_table WHERE imageName = :name")
-    void deleteImage(String name);
+    @Delete
+    void delete (ImageEntity image);
+
+//    Fjernet denne foreløpig
+//    @Query("DELETE FROM image_table WHERE imageName = :name")
+//    void deleteImage(String name);
 
     @Query("SELECT * FROM image_table")
     LiveData<List<ImageEntity>> getAllImages();

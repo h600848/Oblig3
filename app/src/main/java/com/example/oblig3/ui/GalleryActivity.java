@@ -104,7 +104,7 @@ public class GalleryActivity extends AppCompatActivity implements RecyclerViewIn
                 .setPositiveButton("OK", (dialog, which) -> {
                     String name = input.getText().toString().trim();
                     if (!name.isEmpty()) {
-                        ImageEntity newImage = new ImageEntity(name, imageUri.toString());
+                        ImageEntity newImage = new ImageEntity(name, imageUri);
                         imageViewModel.insertImage(newImage);
                     }
                 })
@@ -124,15 +124,15 @@ public class GalleryActivity extends AppCompatActivity implements RecyclerViewIn
     public void onItemClick(int position) {
         // Hent informasjon om bildet basert på posisjon - dette krever endringer i ViewModel
         // For demonstrasjonsformål antar vi at ImageViewModel har en metode for å hente ImageEntity basert på ID/posisjon
-        imageViewModel.getImageById(position).observe(this, imageEntity -> {
-            if (imageEntity != null) {
-                // Starter DeleteImageActivity med bildeinformasjon
-                Intent intent = new Intent(this, DeleteImageActivity.class);
-                intent.putExtra("NAME", imageEntity.getImageName());
-                Uri imageUri = Uri.parse(imageEntity.getImagePath());
-                intent.putExtra("IMAGE", imageUri.toString());
-                startActivity(intent);
-            }
-        });
+    //    imageViewModel.getImageById(position).observe(this, imageEntity -> {
+    //        if (imageEntity != null) {
+    //            // Starter DeleteImageActivity med bildeinformasjon
+    //            Intent intent = new Intent(this, DeleteImageActivity.class);
+    //            intent.putExtra("NAME", imageEntity.getImageName());
+    //            Uri imageUri = Uri.parse(imageEntity.getImagePath());
+    //            intent.putExtra("IMAGE", imageUri.toString());
+    //            startActivity(intent);
+    //        }
+    //    });
     }
 }
